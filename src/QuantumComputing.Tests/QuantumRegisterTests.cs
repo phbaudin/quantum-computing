@@ -1,4 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿/*
+ * Quantum computing
+ * A library to manipulate qubits and simulate quantum circuits
+ * Author: Pierre-Henry Baudin
+ */
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Numerics;
 
@@ -67,6 +74,16 @@ namespace Lachesis.QuantumComputing.Tests
 			QuantumRegister quantumRegister = QuantumRegister.EPRPair;
 			quantumRegister.Collapse(QuantumRegisterTests.random);
 			Assert.IsTrue(quantumRegister.Equals(new QuantumRegister(Qubit.Zero, Qubit.Zero)) || quantumRegister.Equals(new QuantumRegister(Qubit.One, Qubit.One)));
+		}
+
+		[TestMethod]
+		public void QuantumRegister_CollapseWState_WithRandomMock_Is001()
+		{
+			QuantumRegister quantumRegister = QuantumRegister.WState;
+			Random randomMock = Mock.Of<Random>();
+			Mock.Get(randomMock).Setup(random => random.NextDouble()).Returns(0.2);
+			quantumRegister.Collapse(randomMock);
+			Assert.IsTrue(quantumRegister.Equals(new QuantumRegister(Qubit.Zero, Qubit.Zero, Qubit.One)));
 		}
 	}
 }

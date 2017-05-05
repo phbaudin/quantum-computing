@@ -1,4 +1,10 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿/*
+ * Quantum computing
+ * A library to manipulate qubits and simulate quantum circuits
+ * Author: Pierre-Henry Baudin
+ */
+
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Numerics;
 
@@ -9,19 +15,19 @@ namespace Lachesis.QuantumComputing.Mathematics
 		/*
 		 * Cartesian product of two vectors
 		 */
-		public static Vector<Complex> CartesianProduct(Vector<Complex> Vector1, Vector<Complex> Vector2)
+		public static Vector<Complex> CartesianProduct(Vector<Complex> vector1, Vector<Complex> vector2)
 		{
-			Complex[] CartesianProductArray = new Complex[Vector1.Count * Vector2.Count];
+			Complex[] cartesianProductArray = new Complex[vector1.Count * vector2.Count];
 
-			for (int i = 0; i < Vector1.Count; i++)
+			for (int i = 0; i < vector1.Count; i++)
 			{
-				for (int j = 0; j < Vector2.Count; j++)
+				for (int j = 0; j < vector2.Count; j++)
 				{
-					CartesianProductArray[i * Vector2.Count + j] = Vector1.At(i) * Vector2.At(j);
+					cartesianProductArray[i * vector2.Count + j] = vector1.At(i) * vector2.At(j);
 				}
 			}
 			
-			return Vector<Complex>.Build.SparseOfArray(CartesianProductArray);
+			return Vector<Complex>.Build.SparseOfArray(cartesianProductArray);
 		}
 
 		/*

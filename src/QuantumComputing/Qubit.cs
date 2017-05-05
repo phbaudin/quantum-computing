@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Quantum computing
+ * A library to manipulate qubits and simulate quantum circuits
+ * Author: Pierre-Henry Baudin
+ */
+
+using System;
 using System.Numerics;
 
 namespace Lachesis.QuantumComputing

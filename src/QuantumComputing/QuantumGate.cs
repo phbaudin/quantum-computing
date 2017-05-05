@@ -1,4 +1,10 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿/*
+ * Quantum computing
+ * A library to manipulate qubits and simulate quantum circuits
+ * Author: Pierre-Henry Baudin
+ */
+
+using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics;
 using System;
 using System.Numerics;
