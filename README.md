@@ -1,4 +1,4 @@
-# Quantum computing
+# Quantum.NET (Lachesis.QuantumComputing)
 
 ## Description
 
@@ -77,6 +77,8 @@ quantumRegister.Collapse(random); // |00> or |11>
 
 Quantum gates are required to operate on quantum registers. Shortcuts are also available for notable quantum gates:
 
+* `QuantumGate.IdentityGate`
+* `QuantumGate.IdentityGateOfLength(int registerLength)`
 * `QuantumGate.HadamardGate`
 * `QuantumGate.HadamardGateOfLength(int registerLength)`
 * `QuantumGate.NotGate`
@@ -92,7 +94,13 @@ Quantum gates are required to operate on quantum registers. Shortcuts are also a
 * `QuantumGate.FredkinGate`
 * `QuantumGate.QuantumFourierTransform(int registerLength)`
 
-Quantum gates can also be created from a bidimensional array of complex numbers:
+A quantum gate can be created from other quantum gates (variadic constructor, also works with `QuantumGate[]` and `IEnumerable<QuantumGate>`):
+
+```csharp
+QuantumGate quantumGate = new QuantumGate(QuantumGate.PauliZGate, QuantumGate.IdentityGate); // This gate will apply the Pauli-Z gate to the first qubit and leave the second one unchanged
+```
+
+Or from a bidimensional array of complex numbers:
 
 ```csharp
 QuantumGate quantumGate = new QuantumGate(new Complex[,] {

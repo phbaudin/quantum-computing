@@ -1,5 +1,5 @@
 ﻿/*
- * Quantum computing
+ * Quantum.NET
  * A library to manipulate qubits and simulate quantum circuits
  * Author: Pierre-Henry Baudin
  */
@@ -14,6 +14,17 @@ namespace Lachesis.QuantumComputing.Tests
 	[TestClass]
 	public class QuantumGateTests
 	{
+		[TestMethod]
+		public void QuantumGate_HadamardGateOfLength2_IsValid()
+		{
+			Assert.IsTrue(QuantumGate.HadamardGateOfLength(2).AlmostEquals(new QuantumGate(new Complex[,] {
+				{ 0.5, 0.5, 0.5, 0.5 },
+				{ 0.5, -0.5, 0.5, -0.5 },
+				{ 0.5, 0.5, -0.5, -0.5 },
+				{ 0.5, -0.5, -0.5, 0.5 },
+			})));
+		}
+
 		[TestMethod]
 		public void QuantumGate_PhaseShiftGateFromPiOverTwo_IsValid()
 		{
@@ -67,6 +78,14 @@ namespace Lachesis.QuantumComputing.Tests
 		public void QuantumGate_ApplicationToQuantumRegister_IsValid()
 		{
 			Assert.AreEqual(QuantumGate.NotGate * Qubit.Zero, Qubit.One);
+		}
+
+		[TestMethod]
+		public void QuantumGate_CombinedApplicationToQuantumRegister_IsValid()
+		{
+			QuantumGate quantumGate = new QuantumGate(QuantumGate.NotGate, QuantumGate.IdentityGate);
+			QuantumRegister quantumRegister = new QuantumRegister(Qubit.Zero, Qubit.One);
+			Assert.AreEqual(quantumGate * quantumRegister, new QuantumRegister(Qubit.One, Qubit.One));
 		}
 	}
 }

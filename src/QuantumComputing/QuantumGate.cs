@@ -1,5 +1,5 @@
 ﻿/*
- * Quantum computing
+ * Quantum.NET
  * A library to manipulate qubits and simulate quantum circuits
  * Author: Pierre-Henry Baudin
  */
@@ -7,6 +7,8 @@
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Lachesis.QuantumComputing
@@ -17,6 +19,19 @@ namespace Lachesis.QuantumComputing
 		 * Matrix representation of a quantum gate
 		 */
 		public Matrix<Complex> Matrix { get; private set; }
+
+		/*
+		 * Constructor from other quantum gates
+		 */
+		public QuantumGate(params QuantumGate[] quantumGates) : this((IEnumerable<QuantumGate>)quantumGates) { }
+
+		/*
+		 * Constructor from enumerable of other quantum gates
+		 */
+		public QuantumGate(IEnumerable<QuantumGate> quantumGates)
+		{
+			this.Matrix = quantumGates.Aggregate(Matrix<Complex>.Build.Sparse(1, 1, Complex.One), (matrix, quantumGate) => matrix.KroneckerProduct(quantumGate.Matrix));
+		}
 
 		/*
 		 * Constructor from a bidimensional array of complex coefficients
@@ -34,6 +49,25 @@ namespace Lachesis.QuantumComputing
 			}
 
 			this.Matrix = matrix;
+		}
+
+		/*
+		 * Identity gate
+		 */
+		public static QuantumGate IdentityGate
+		{
+			get
+			{
+				return QuantumGate.IdentityGateOfLength(1);
+			}
+		}
+
+		/*
+		 * Stacked identity gates
+		 */
+		public static QuantumGate IdentityGateOfLength(int registerLength)
+		{
+			return new QuantumGate(Matrix<Complex>.Build.SparseIdentity(1 << registerLength));
 		}
 
 		/*
@@ -61,7 +95,7 @@ namespace Lachesis.QuantumComputing
 			}
 			else
 			{
-				return new QuantumGate(QuantumGate.HadamardGate.Matrix.KroneckerProduct(QuantumGate.HadamardGateOfLength(registerLength - 1).Matrix));
+				return new QuantumGate(QuantumGate.HadamardGate, QuantumGate.HadamardGateOfLength(registerLength - 1));
 			}
 		}
 
