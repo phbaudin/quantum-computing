@@ -100,6 +100,56 @@ namespace Lachesis.QuantumComputing
 		}
 
 		/*
+		 * Returns the value contained in a quantum register, with optional portion start and length
+		 */
+		public int GetValue(int portionStart = 0, int portionLength = 0)
+		{
+			int registerLength = Mathematics.Numerics.Log2(this.Vector.Count - 1);
+			
+			if (portionLength == 0)
+			{
+				portionLength = registerLength - portionStart;
+			}
+
+			int trailingBitCount = registerLength - portionStart - portionLength;
+
+			if (trailingBitCount < 0)
+			{
+				throw new ArgumentException("The supplied portion overflows the given quantum register.");
+			}
+
+			int index = -1;
+
+			for (int i = 0; i < this.Vector.Count; i++)
+			{
+				if (this.Vector.At(i) == 1)
+				{
+					index = i;
+					break;
+				}
+			}
+
+			if (index == -1)
+			{
+				throw new SystemException("A value can only be extracted from a pure state quantum register.");
+			}
+
+			// If trailing bits need to be removed
+			if (trailingBitCount > 0)
+			{
+				index >>= trailingBitCount;
+			}
+
+			// If leading bits need to be removed
+			if (portionStart > 0)
+			{
+				index &= (1 << portionLength) - 1;
+			}
+
+			return index;
+		}
+
+		/*
 		 * Einstein–Podolsky–Rosen pair
 		 */
 		public static QuantumRegister EPRPair

@@ -46,5 +46,23 @@ namespace Lachesis.QuantumComputing.Mathematics
 
 			return value + 1;
 		}
+
+		/*
+		 * Binary logarithm
+		 */
+		public static int Log2(int value)
+		{
+			int log2 = 1;
+
+			for (int bitCount = 16; bitCount > 0; bitCount /= 2)
+			{
+				if (value >= 1 << bitCount) {
+					value >>= bitCount;
+					log2 += bitCount;
+				}
+			}
+
+			return log2;
+		}
 	}
 }

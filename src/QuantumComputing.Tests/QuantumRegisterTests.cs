@@ -14,12 +14,12 @@ namespace Lachesis.QuantumComputing.Tests
 	[TestClass]
 	public class QuantumRegisterTests
 	{
-		private static Random random;
+		private static Random Random;
 
 		[ClassInitialize]
 		public static void ClassInit(TestContext context)
 		{
-			QuantumRegisterTests.random = new Random();
+			QuantumRegisterTests.Random = new Random();
 		}
 
 		[TestMethod]
@@ -64,7 +64,7 @@ namespace Lachesis.QuantumComputing.Tests
 		public void QuantumRegister_CollapsePureState_StaysTheSame()
 		{
 			QuantumRegister zeroOne = new QuantumRegister(Qubit.Zero, Qubit.One);
-			zeroOne.Collapse(QuantumRegisterTests.random);
+			zeroOne.Collapse(QuantumRegisterTests.Random);
 			Assert.AreEqual(zeroOne, new QuantumRegister(Qubit.Zero, Qubit.One));
 		}
 
@@ -72,7 +72,7 @@ namespace Lachesis.QuantumComputing.Tests
 		public void QuantumRegister_CollapseEPRPair_Is00Or11()
 		{
 			QuantumRegister quantumRegister = QuantumRegister.EPRPair;
-			quantumRegister.Collapse(QuantumRegisterTests.random);
+			quantumRegister.Collapse(QuantumRegisterTests.Random);
 			Assert.IsTrue(quantumRegister.Equals(new QuantumRegister(Qubit.Zero, Qubit.Zero)) || quantumRegister.Equals(new QuantumRegister(Qubit.One, Qubit.One)));
 		}
 
@@ -84,6 +84,31 @@ namespace Lachesis.QuantumComputing.Tests
 			Mock.Get(randomMock).Setup(random => random.NextDouble()).Returns(0.2);
 			quantumRegister.Collapse(randomMock);
 			Assert.IsTrue(quantumRegister.Equals(new QuantumRegister(Qubit.Zero, Qubit.Zero, Qubit.One)));
+		}
+
+		[TestMethod]
+		public void QuantumRegister_GetValue_IsValid()
+		{
+			QuantumRegister quantumRegister = new QuantumRegister(27);
+
+			Assert.AreEqual(quantumRegister.GetValue(), 27);
+			Assert.AreEqual(quantumRegister.GetValue(1), 11);
+			Assert.AreEqual(quantumRegister.GetValue(1, 3), 5);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentException))]
+		public void QuantumRegister_GetValueWithOverflow_ThrowsArgumentException()
+		{
+			QuantumRegister quantumRegister = new QuantumRegister(5);
+			quantumRegister.GetValue(1, 3);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(SystemException))]
+		public void QuantumRegister_GetValueOnMixedState_ThrowsSystemException()
+		{
+			Qubit.EPRPair.GetValue();
 		}
 	}
 }

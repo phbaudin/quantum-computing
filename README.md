@@ -75,6 +75,16 @@ QuantumRegister quantumRegister = QuantumRegister.EPRPair;
 quantumRegister.Collapse(random); // |00> or |11>
 ```
 
+A pure state quantum register can be read to obtain the number it represents, with optional offset and length parameters to read a subsection only:
+
+```csharp
+QuantumRegister quantumRegister = new QuantumRegister(27); // |11011>
+int a = quantumRegister.GetValue(); // 27 (0b11011)
+int b = quantumRegister.GetValue(1); // 11 (0b1011)
+int c = quantumRegister.GetValue(1, 3); // 5 (0b101)
+int d = Qubit.EPRPair.GetValue(); // cannot be used on a mixed state; throws System.SystemException
+```
+
 Quantum gates are required to operate on quantum registers. Shortcuts are also available for notable quantum gates:
 
 * `QuantumGate.IdentityGate`
